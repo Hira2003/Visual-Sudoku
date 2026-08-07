@@ -4,35 +4,54 @@ class App {
 
         this.game = new Game();
 
+
         this.boardElement =
             document.getElementById(
                 "sudokuBoard"
             );
+
 
         this.paletteElement =
             document.getElementById(
                 "symbolPalette"
             );
 
+
         this.timerElement =
-            document.getElementById("timer");
+            document.getElementById(
+                "timer"
+            );
+
 
         this.messageElement =
-            document.getElementById("message");
+            document.getElementById(
+                "message"
+            );
+
 
         this.winModal =
-            document.getElementById("winModal");
+            document.getElementById(
+                "winModal"
+            );
+
 
         this.finalTime =
-            document.getElementById("finalTime");
+            document.getElementById(
+                "finalTime"
+            );
+
 
         this.difficultySelect =
             document.getElementById(
                 "difficulty"
             );
 
+
         this.themeSelect =
-            document.getElementById("theme");
+            document.getElementById(
+                "theme"
+            );
+
 
         this.bindEvents();
 
@@ -43,7 +62,9 @@ class App {
     bindEvents() {
 
         document
-            .getElementById("newGameBtn")
+            .getElementById(
+                "newGameBtn"
+            )
             .addEventListener(
                 "click",
                 () => this.newGame()
@@ -51,7 +72,9 @@ class App {
 
 
         document
-            .getElementById("restartBtn")
+            .getElementById(
+                "restartBtn"
+            )
             .addEventListener(
                 "click",
                 () => this.restart()
@@ -59,7 +82,9 @@ class App {
 
 
         document
-            .getElementById("hintBtn")
+            .getElementById(
+                "hintBtn"
+            )
             .addEventListener(
                 "click",
                 () => this.hint()
@@ -67,12 +92,15 @@ class App {
 
 
         document
-            .getElementById("nextGameBtn")
+            .getElementById(
+                "nextGameBtn"
+            )
             .addEventListener(
                 "click",
                 () => {
 
                     this.closeWinModal();
+
                     this.newGame();
 
                 }
@@ -103,6 +131,45 @@ class App {
                     this.render();
                 }
             );
+
+
+        /*
+            Keyboard support for desktop.
+
+            Users can press 1-9 to enter
+            numbers without clicking the palette.
+        */
+
+        document.addEventListener(
+            "keydown",
+            event => {
+
+                const key =
+                    event.key;
+
+
+                if (
+                    key >= "1" &&
+                    key <= "9"
+                ) {
+
+                    this.enterValue(
+                        Number(key)
+                    );
+                }
+
+
+                if (
+                    key === "Escape"
+                ) {
+
+                    this.game.selectedCell =
+                        null;
+
+                    this.render();
+                }
+            }
+        );
     }
 
 
@@ -111,13 +178,16 @@ class App {
         this.game.difficulty =
             this.difficultySelect.value;
 
+
         this.game.theme =
             this.themeSelect.value;
 
 
         this.game.start();
 
+
         this.render();
+
 
         this.message("");
     }
@@ -127,9 +197,13 @@ class App {
 
         this.game.restart();
 
+
         this.render();
 
-        this.message("Puzzle restarted.");
+
+        this.message(
+            "Puzzle restarted."
+        );
     }
 
 
@@ -147,19 +221,34 @@ class App {
 
         this.boardElement.innerHTML = "";
 
+
         const theme =
-            getTheme(this.game.theme);
+            getTheme(
+                this.game.theme
+            );
 
 
-        for (let row = 0; row < 9; row++) {
+        for (
+            let row = 0;
+            row < 9;
+            row++
+        ) {
 
-            for (let col = 0; col < 9; col++) {
+            for (
+                let col = 0;
+                col < 9;
+                col++
+            ) {
 
                 const cell =
-                    document.createElement("div");
+                    document.createElement(
+                        "div"
+                    );
 
 
-                cell.classList.add("cell");
+                cell.classList.add(
+                    "cell"
+                );
 
 
                 const value =
@@ -171,7 +260,10 @@ class App {
 
 
                 if (isGiven) {
-                    cell.classList.add("given");
+
+                    cell.classList.add(
+                        "given"
+                    );
                 }
 
 
@@ -181,28 +273,49 @@ class App {
                     this.game.selectedCell.col === col
                 ) {
 
-                    cell.classList.add("selected");
+                    cell.classList.add(
+                        "selected"
+                    );
                 }
 
 
                 if (value !== null) {
 
                     cell.textContent =
-                        theme.symbols[value - 1];
+                        theme.symbols[
+                            value - 1
+                        ];
                 }
+
+
+                cell.setAttribute(
+                    "role",
+                    "button"
+                );
+
+
+                cell.setAttribute(
+                    "aria-label",
+                    `Row ${row + 1}, Column ${col + 1}`
+                );
 
 
                 cell.addEventListener(
                     "click",
                     () => {
 
-                        this.selectCell(row, col);
+                        this.selectCell(
+                            row,
+                            col
+                        );
 
                     }
                 );
 
 
-                this.boardElement.appendChild(cell);
+                this.boardElement.appendChild(
+                    cell
+                );
             }
         }
     }
@@ -212,23 +325,38 @@ class App {
 
         this.paletteElement.innerHTML = "";
 
+
         const theme =
-            getTheme(this.game.theme);
+            getTheme(
+                this.game.theme
+            );
 
 
         theme.symbols.forEach(
             (symbol, index) => {
 
                 const button =
-                    document.createElement("button");
+                    document.createElement(
+                        "button"
+                    );
 
 
                 button.className =
                     "symbol-button";
 
 
+                button.type =
+                    "button";
+
+
                 button.textContent =
                     symbol;
+
+
+                button.setAttribute(
+                    "aria-label",
+                    `Symbol ${index + 1}`
+                );
 
 
                 button.addEventListener(
@@ -253,7 +381,11 @@ class App {
 
     selectCell(row, col) {
 
-        this.game.selectCell(row, col);
+        this.game.selectCell(
+            row,
+            col
+        );
+
 
         this.render();
     }
@@ -276,7 +408,9 @@ class App {
 
 
         const correct =
-            this.game.setValue(value);
+            this.game.setValue(
+                value
+            );
 
 
         if (!correct) {
@@ -286,9 +420,11 @@ class App {
                 selected.col
             );
 
+
             this.message(
                 "That's not the correct symbol."
             );
+
 
             return;
         }
@@ -296,10 +432,13 @@ class App {
 
         this.message("");
 
+
         this.render();
 
 
-        if (this.game.isFinished()) {
+        if (
+            this.game.isFinished()
+        ) {
 
             this.game.stopTimer();
 
@@ -315,17 +454,30 @@ class App {
 
 
         const cell =
-            this.boardElement.children[index];
+            this.boardElement
+                .children[index];
 
 
-        cell.classList.add("error");
+        if (!cell) {
+            return;
+        }
 
 
-        setTimeout(() => {
+        cell.classList.add(
+            "error"
+        );
 
-            cell.classList.remove("error");
 
-        }, 400);
+        setTimeout(
+            () => {
+
+                cell.classList.remove(
+                    "error"
+                );
+
+            },
+            400
+        );
     }
 
 
@@ -349,14 +501,33 @@ class App {
 
 
         const index =
-            result.row * 9 + result.col;
+            result.row * 9 +
+            result.col;
 
 
         const cell =
-            this.boardElement.children[index];
+            this.boardElement
+                .children[index];
 
 
-        cell.classList.add("hint");
+        if (cell) {
+
+            cell.classList.add(
+                "hint"
+            );
+
+
+            setTimeout(
+                () => {
+
+                    cell.classList.remove(
+                        "hint"
+                    );
+
+                },
+                800
+            );
+        }
 
 
         this.message(
@@ -364,14 +535,9 @@ class App {
         );
 
 
-        setTimeout(() => {
-
-            cell.classList.remove("hint");
-
-        }, 800);
-
-
-        if (this.game.isFinished()) {
+        if (
+            this.game.isFinished()
+        ) {
 
             this.game.stopTimer();
 
@@ -399,6 +565,7 @@ class App {
         this.finalTime.textContent =
             this.game.getTimeString();
 
+
         this.winModal.classList.remove(
             "hidden"
         );
@@ -411,6 +578,7 @@ class App {
             "hidden"
         );
     }
+
 }
 
 
@@ -418,7 +586,8 @@ window.addEventListener(
     "DOMContentLoaded",
     () => {
 
-        window.app = new App();
+        window.app =
+            new App();
 
     }
 );
