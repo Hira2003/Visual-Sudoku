@@ -3,15 +3,19 @@ class Game {
     constructor() {
 
         this.difficulty = "medium";
-        this.theme = "fruits";
+
+        this.theme = "numbers";
 
         this.puzzle = null;
+
         this.solution = null;
+
         this.board = null;
 
         this.selectedCell = null;
 
         this.elapsedSeconds = 0;
+
         this.timerInterval = null;
 
         this.isRunning = false;
@@ -29,12 +33,15 @@ class Game {
         this.puzzle =
             generated.puzzle;
 
+
         this.solution =
             generated.solution;
 
 
         this.board =
-            this.puzzle.map(row => [...row]);
+            this.puzzle.map(
+                row => [...row]
+            );
 
 
         this.selectedCell = null;
@@ -51,16 +58,23 @@ class Game {
 
         this.isRunning = true;
 
+
         this.timerInterval =
-            setInterval(() => {
+            setInterval(
+                () => {
 
-                this.elapsedSeconds++;
+                    this.elapsedSeconds++;
 
-                if (window.app) {
-                    window.app.updateTimer();
-                }
 
-            }, 1000);
+                    if (window.app) {
+
+                        window.app.updateTimer();
+
+                    }
+
+                },
+                1000
+            );
     }
 
 
@@ -75,6 +89,7 @@ class Game {
             this.timerInterval = null;
         }
 
+
         this.isRunning = false;
     }
 
@@ -82,7 +97,12 @@ class Game {
     restart() {
 
         this.board =
-            this.puzzle.map(row => [...row]);
+            this.puzzle.map(
+                row => [...row]
+            );
+
+
+        this.selectedCell = null;
 
         this.elapsedSeconds = 0;
 
@@ -95,8 +115,10 @@ class Game {
         if (
             this.puzzle[row][col] !== null
         ) {
+
             return;
         }
+
 
         this.selectedCell = {
             row,
@@ -108,6 +130,7 @@ class Game {
     setValue(value) {
 
         if (!this.selectedCell) {
+
             return false;
         }
 
@@ -121,12 +144,14 @@ class Game {
         if (
             this.puzzle[row][col] !== null
         ) {
+
             return false;
         }
 
 
         if (
-            value !== this.solution[row][col]
+            value !==
+            this.solution[row][col]
         ) {
 
             return false;
@@ -135,6 +160,7 @@ class Game {
 
         this.board[row][col] = value;
 
+
         return true;
     }
 
@@ -142,6 +168,7 @@ class Game {
     giveHint() {
 
         if (!this.selectedCell) {
+
             return null;
         }
 
@@ -155,6 +182,7 @@ class Game {
         if (
             this.puzzle[row][col] !== null
         ) {
+
             return null;
         }
 
@@ -190,10 +218,15 @@ class Game {
                 this.elapsedSeconds / 60
             );
 
+
         const seconds =
             this.elapsedSeconds % 60;
 
 
-        return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+        return (
+            `${String(minutes).padStart(2, "0")}:` +
+            `${String(seconds).padStart(2, "0")}`
+        );
     }
+
 }
