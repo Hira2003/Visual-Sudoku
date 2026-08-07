@@ -1,5 +1,24 @@
 const THEMES = {
 
+    numbers: {
+
+        name: "Numbers",
+
+        symbols: [
+            "1",
+            "2",
+            "3",
+            "4",
+            "5",
+            "6",
+            "7",
+            "8",
+            "9"
+        ]
+
+    },
+
+
     fruits: {
 
         name: "Fruits",
@@ -42,5 +61,9 @@ const THEMES = {
 
 function getTheme(name) {
 
-    return THEMES[name] || THEMES.fruits;
+    return (
+        THEMES[name] ||
+        THEMES.numbers
+    );
+
 }
