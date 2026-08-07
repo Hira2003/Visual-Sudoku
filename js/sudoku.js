@@ -1,6 +1,7 @@
 class Sudoku {
 
     static SIZE = 9;
+
     static BOX_SIZE = 3;
 
 
@@ -17,15 +18,27 @@ class Sudoku {
 
         const result = [...array];
 
-        for (let i = result.length - 1; i > 0; i--) {
+
+        for (
+            let i = result.length - 1;
+            i > 0;
+            i--
+        ) {
 
             const j = Math.floor(
                 Math.random() * (i + 1)
             );
 
-            [result[i], result[j]] =
-                [result[j], result[i]];
+
+            [
+                result[i],
+                result[j]
+            ] = [
+                result[j],
+                result[i]
+            ];
         }
+
 
         return result;
     }
@@ -33,9 +46,12 @@ class Sudoku {
 
     static generateSolvedBoard() {
 
-        const board = this.createEmptyBoard();
+        const board =
+            this.createEmptyBoard();
+
 
         this.solve(board);
+
 
         return board;
     }
@@ -43,17 +59,24 @@ class Sudoku {
 
     static solve(board) {
 
-        const empty = this.findEmptyCell(board);
+        const empty =
+            this.findEmptyCell(board);
+
 
         if (!empty) {
             return true;
         }
 
+
         const [row, col] = empty;
 
-        const numbers = this.shuffle(
-            [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        );
+
+        const numbers =
+            this.shuffle([
+                1, 2, 3,
+                4, 5, 6,
+                7, 8, 9
+            ]);
 
 
         for (const number of numbers) {
@@ -70,7 +93,10 @@ class Sudoku {
                 board[row][col] = number;
 
 
-                if (this.solve(board)) {
+                if (
+                    this.solve(board)
+                ) {
+
                     return true;
                 }
 
@@ -79,21 +105,37 @@ class Sudoku {
             }
         }
 
+
         return false;
     }
 
 
     static findEmptyCell(board) {
 
-        for (let row = 0; row < this.SIZE; row++) {
+        for (
+            let row = 0;
+            row < this.SIZE;
+            row++
+        ) {
 
-            for (let col = 0; col < this.SIZE; col++) {
+            for (
+                let col = 0;
+                col < this.SIZE;
+                col++
+            ) {
 
-                if (board[row][col] === null) {
-                    return [row, col];
+                if (
+                    board[row][col] === null
+                ) {
+
+                    return [
+                        row,
+                        col
+                    ];
                 }
             }
         }
+
 
         return null;
     }
@@ -108,12 +150,17 @@ class Sudoku {
 
         // Row
 
-        for (let c = 0; c < this.SIZE; c++) {
+        for (
+            let c = 0;
+            c < this.SIZE;
+            c++
+        ) {
 
             if (
                 c !== col &&
                 board[row][c] === number
             ) {
+
                 return false;
             }
         }
@@ -121,18 +168,23 @@ class Sudoku {
 
         // Column
 
-        for (let r = 0; r < this.SIZE; r++) {
+        for (
+            let r = 0;
+            r < this.SIZE;
+            r++
+        ) {
 
             if (
                 r !== row &&
                 board[r][col] === number
             ) {
+
                 return false;
             }
         }
 
 
-        // 3x3 box
+        // 3 × 3 box
 
         const startRow =
             Math.floor(row / 3) * 3;
@@ -157,29 +209,37 @@ class Sudoku {
                     (r !== row || c !== col) &&
                     board[r][c] === number
                 ) {
+
                     return false;
                 }
             }
         }
 
+
         return true;
     }
 
 
-    static generatePuzzle(difficulty = "medium") {
+    static generatePuzzle(
+        difficulty = "medium"
+    ) {
 
         const solution =
             this.generateSolvedBoard();
 
 
         const puzzle =
-            solution.map(row => [...row]);
+            solution.map(
+                row => [...row]
+            );
 
 
         const cellsToRemove = {
 
             easy: 38,
+
             medium: 48,
+
             hard: 55
 
         }[difficulty];
@@ -187,11 +247,23 @@ class Sudoku {
 
         const positions = [];
 
-        for (let row = 0; row < 9; row++) {
 
-            for (let col = 0; col < 9; col++) {
+        for (
+            let row = 0;
+            row < 9;
+            row++
+        ) {
 
-                positions.push([row, col]);
+            for (
+                let col = 0;
+                col < 9;
+                col++
+            ) {
+
+                positions.push([
+                    row,
+                    col
+                ]);
             }
         }
 
@@ -206,8 +278,11 @@ class Sudoku {
             i++
         ) {
 
-            const [row, col] =
-                shuffledPositions[i];
+            const [
+                row,
+                col
+            ] = shuffledPositions[i];
+
 
             puzzle[row][col] = null;
         }
@@ -220,40 +295,35 @@ class Sudoku {
     }
 
 
-    static isComplete(board) {
-
-        for (let row = 0; row < 9; row++) {
-
-            for (let col = 0; col < 9; col++) {
-
-                if (board[row][col] === null) {
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
-
-
     static isCorrect(
         board,
         solution
     ) {
 
-        for (let row = 0; row < 9; row++) {
+        for (
+            let row = 0;
+            row < 9;
+            row++
+        ) {
 
-            for (let col = 0; col < 9; col++) {
+            for (
+                let col = 0;
+                col < 9;
+                col++
+            ) {
 
                 if (
                     board[row][col] !==
                     solution[row][col]
                 ) {
+
                     return false;
                 }
             }
         }
 
+
         return true;
     }
+
 }
