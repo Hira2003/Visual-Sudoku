@@ -1393,3 +1393,263 @@ select:focus {
     }
 
 }
+/* =========================================
+   DARK MODE
+   ========================================= */
+
+   body.dark-mode {
+    background: #111318;
+    color: #f1f3f5;
+}
+
+/* Main containers */
+
+body.dark-mode .game-container,
+body.dark-mode .game-header,
+body.dark-mode .game-info,
+body.dark-mode .controls {
+    color: #f1f3f5;
+}
+
+
+/* Header */
+
+body.dark-mode .game-title,
+body.dark-mode h1,
+body.dark-mode h2,
+body.dark-mode h3 {
+    color: #f1f3f5;
+}
+
+
+body.dark-mode .subtitle,
+body.dark-mode .difficulty-label {
+    color: #aeb4c0;
+}
+
+
+/* Timer */
+
+body.dark-mode .timer-box {
+    background: #1b1e25;
+    border-color: #343944;
+    color: #ffffff;
+}
+
+
+/* Difficulty box */
+
+body.dark-mode .difficulty-box {
+    background: #1b1e25;
+    border-color: #343944;
+    color: #ffffff;
+}
+
+
+/* Sudoku board */
+
+body.dark-mode #sudokuBoard {
+    background: #1a1d23;
+    border-color: #596171;
+}
+
+
+/* Sudoku cells */
+
+body.dark-mode .cell {
+    background: #1a1d23;
+    color: #f5f7fa;
+    border-color: #343944;
+}
+
+
+/* Given cells */
+
+body.dark-mode .cell.given {
+    background: #242832;
+    color: #ffffff;
+}
+
+
+/* Selected cell */
+
+body.dark-mode .cell.selected {
+    background: #303746;
+}
+
+
+/* Mistake */
+
+body.dark-mode .cell.error {
+    background: #5a252b;
+    color: #ffb3b8;
+}
+
+
+/* Symbol palette */
+
+body.dark-mode .symbol-button {
+    background: #1b1e25;
+    border-color: #343944;
+    color: #ffffff;
+}
+
+
+body.dark-mode .symbol-button:hover {
+    background: #2a2f3a;
+}
+
+
+/* Buttons */
+
+body.dark-mode button {
+    color: #f1f3f5;
+}
+
+
+/* Exit / normal buttons */
+
+body.dark-mode .exit-button,
+body.dark-mode .restart-button,
+body.dark-mode .hint-button {
+    background: #1b1e25;
+    border-color: #343944;
+    color: #ffffff;
+}
+
+
+body.dark-mode .exit-button:hover,
+body.dark-mode .restart-button:hover,
+body.dark-mode .hint-button:hover {
+    background: #292e38;
+}
+
+
+/* Message */
+
+body.dark-mode #message {
+    color: #c7ccd6;
+}
+
+
+/* Win modal */
+
+body.dark-mode .modal {
+    background: #1b1e25;
+    color: #ffffff;
+}
+
+
+body.dark-mode .modal h2 {
+    color: #ffffff;
+}
+
+
+/* Dark mode button */
+
+body.dark-mode #darkMode {
+    background: #1b1e25;
+    border-color: #454b58;
+    color: #ffffff;
+}
+/* =========================================
+   GLOBAL DARK MODE
+   ========================================= */
+
+   body.dark-mode {
+    background-color: #111318 !important;
+    color: #f1f3f5 !important;
+}
+
+body.dark-mode main,
+body.dark-mode section,
+body.dark-mode header,
+body.dark-mode .container {
+    color: #f1f3f5;
+}
+
+
+/* Text */
+
+body.dark-mode p,
+body.dark-mode span,
+body.dark-mode label {
+    color: #c8cdd6;
+}
+
+
+/* Sudoku board */
+
+body.dark-mode #sudokuBoard {
+    background-color: #181b21 !important;
+    border-color: #4b5260 !important;
+}
+
+
+/* Every cell */
+
+body.dark-mode #sudokuBoard .cell {
+    background-color: #181b21 !important;
+    color: #ffffff !important;
+    border-color: #363c47 !important;
+}
+
+
+/* Fixed numbers */
+
+body.dark-mode #sudokuBoard .cell.given {
+    background-color: #242933 !important;
+}
+
+
+/* Selected */
+
+body.dark-mode #sudokuBoard .cell.selected {
+    background-color: #343b49 !important;
+}
+
+
+/* Wrong answer */
+
+body.dark-mode #sudokuBoard .cell.error {
+    background-color: #64282e !important;
+    color: #ffb8bd !important;
+}
+
+
+/* Palette */
+
+body.dark-mode #symbolPalette button {
+    background-color: #1b1e25 !important;
+    color: #ffffff !important;
+    border-color: #3c424e !important;
+}
+
+
+/* Timer / information cards */
+
+body.dark-mode .timer,
+body.dark-mode #timer,
+body.dark-mode .info-box,
+body.dark-mode .difficulty {
+    background-color: #1b1e25 !important;
+    color: #ffffff !important;
+    border-color: #3c424e !important;
+}
+
+
+/* Buttons */
+
+body.dark-mode button {
+    background-color: #1b1e25;
+    color: #ffffff;
+    border-color: #3c424e;
+}
+
+
+/* Modal */
+
+body.dark-mode #winModal {
+    background-color: #1b1e25;
+    color: #ffffff;
+}
