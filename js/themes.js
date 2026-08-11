@@ -18,7 +18,6 @@ const THEMES = {
 
     },
 
-
     fruits: {
 
         name: "Fruits",
@@ -28,15 +27,14 @@ const THEMES = {
             "🍊",
             "🍋",
             "🍇",
-            "🍓",
             "🍉",
+            "🍓",
+            "🍒",
             "🥝",
-            "🍑",
-            "🍒"
+            "🍍"
         ]
 
     },
-
 
     flowers: {
 
@@ -44,14 +42,14 @@ const THEMES = {
 
         symbols: [
             "🌸",
-            "🌷",
             "🌻",
+            "🌷",
             "🌹",
             "🌺",
-            "🪻",
             "🌼",
-            "🏵️",
-            "💮"
+            "💮",
+            "🪻",
+            "🏵️"
         ]
 
     }
@@ -59,10 +57,10 @@ const THEMES = {
 };
 
 
-function getTheme(name) {
+function getTheme(themeName) {
 
     return (
-        THEMES[name] ||
+        THEMES[themeName] ||
         THEMES.numbers
     );
 
