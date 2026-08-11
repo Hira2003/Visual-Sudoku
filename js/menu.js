@@ -1,20 +1,19 @@
-const Menu = {
+class MainMenu {
 
-    difficulty: "medium",
+    constructor() {
 
-    theme: "numbers",
+        this.difficulty =
+            "medium";
+
+        this.theme =
+            "numbers";
+
+        this.bindEvents();
+
+    }
 
 
-    init() {
-
-        this.bindMainButtons();
-
-        this.bindChoices();
-
-    },
-
-
-    bindMainButtons() {
+    bindEvents() {
 
         document
             .getElementById("playButton")
@@ -71,94 +70,101 @@ const Menu = {
                 () => this.startGame()
             );
 
-    },
+
+        this.bindDifficultyButtons();
+
+        this.bindThemeButtons();
+
+    }
 
 
-    bindChoices() {
+    bindDifficultyButtons() {
 
-        document
-            .querySelectorAll(
+        const buttons =
+            document.querySelectorAll(
                 ".difficulty-choice"
-            )
-            .forEach(
-                button => {
-
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            document
-                                .querySelectorAll(
-                                    ".difficulty-choice"
-                                )
-                                .forEach(
-                                    item =>
-                                        item.classList
-                                            .remove(
-                                                "selected"
-                                            )
-                                );
-
-
-                            button.classList
-                                .add(
-                                    "selected"
-                                );
-
-
-                            this.difficulty =
-                                button.dataset.value;
-
-                        }
-                    );
-
-                }
             );
 
 
-        document
-            .querySelectorAll(
+        buttons.forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        buttons.forEach(
+                            item => {
+
+                                item.classList.remove(
+                                    "selected"
+                                );
+
+                            }
+                        );
+
+
+                        button.classList.add(
+                            "selected"
+                        );
+
+
+                        this.difficulty =
+                            button.dataset.value;
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+
+    bindThemeButtons() {
+
+        const buttons =
+            document.querySelectorAll(
                 ".theme-choice"
-            )
-            .forEach(
-                button => {
-
-                    button.addEventListener(
-                        "click",
-                        () => {
-
-                            document
-                                .querySelectorAll(
-                                    ".theme-choice"
-                                )
-                                .forEach(
-                                    item =>
-                                        item.classList
-                                            .remove(
-                                                "selected"
-                                            )
-                                );
+            );
 
 
-                            button.classList
-                                .add(
+        buttons.forEach(
+            button => {
+
+                button.addEventListener(
+                    "click",
+                    () => {
+
+                        buttons.forEach(
+                            item => {
+
+                                item.classList.remove(
                                     "selected"
                                 );
 
-
-                            this.theme =
-                                button.dataset.value;
-
-                        }
-                    );
-
-                }
-            );
-
-    },
+                            }
+                        );
 
 
-    show(sectionId) {
+                        button.classList.add(
+                            "selected"
+                        );
+
+
+                        this.theme =
+                            button.dataset.value;
+
+                    }
+                );
+
+            }
+        );
+
+    }
+
+
+    show(section) {
 
         const sections = [
             "mainMenu",
@@ -171,33 +177,38 @@ const Menu = {
         sections.forEach(
             id => {
 
-                document
-                    .getElementById(id)
-                    .classList
-                    .add("hidden");
+                const element =
+                    document.getElementById(id);
+
+
+                if (element) {
+
+                    element.classList.add(
+                        "hidden"
+                    );
+
+                }
 
             }
         );
 
 
-        document
-            .getElementById(sectionId)
-            .classList
-            .remove("hidden");
+        const target =
+            document.getElementById(section);
 
-    },
+
+        if (target) {
+
+            target.classList.remove(
+                "hidden"
+            );
+
+        }
+
+    }
 
 
     startGame() {
-
-        /*
-            Save the player's choices
-            temporarily.
-
-            sessionStorage means these
-            settings belong to this
-            current game session.
-        */
 
         sessionStorage.setItem(
             "visualSudokuDifficulty",
@@ -216,10 +227,14 @@ const Menu = {
 
     }
 
-};
+}
 
 
-document.addEventListener(
+window.addEventListener(
     "DOMContentLoaded",
-    () => Menu.init()
+    () => {
+
+        new MainMenu();
+
+    }
 );
