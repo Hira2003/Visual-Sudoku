@@ -1,83 +1,45 @@
-class Sudoku {
+class SudokuGenerator {
 
-    static SIZE = 9;
+    constructor() {
+        this.solution = [];
+        this.puzzle = [];
+    }
 
-    static BOX_SIZE = 3;
+    generate() {
+        this.solution = this.createSolvedBoard();
+        this.puzzle = this.createPuzzle(this.solution);
 
+        return {
+            solution: this.solution,
+            puzzle: this.puzzle
+        };
+    }
 
-    static createEmptyBoard() {
+    createSolvedBoard() {
 
-        return Array.from(
-            { length: this.SIZE },
-            () => Array(this.SIZE).fill(null)
+        const board = Array.from(
+            { length: 9 },
+            () => Array(9).fill(0)
         );
-    }
 
-
-    static shuffle(array) {
-
-        const result = [...array];
-
-
-        for (
-            let i = result.length - 1;
-            i > 0;
-            i--
-        ) {
-
-            const j = Math.floor(
-                Math.random() * (i + 1)
-            );
-
-
-            [
-                result[i],
-                result[j]
-            ] = [
-                result[j],
-                result[i]
-            ];
-        }
-
-
-        return result;
-    }
-
-
-    static generateSolvedBoard() {
-
-        const board =
-            this.createEmptyBoard();
-
-
-        this.solve(board);
-
+        this.fillBoard(board);
 
         return board;
     }
 
+    fillBoard(board) {
 
-    static solve(board) {
-
-        const empty =
-            this.findEmptyCell(board);
-
+        const empty = this.findEmptyCell(board);
 
         if (!empty) {
             return true;
         }
 
-
         const [row, col] = empty;
 
-
-        const numbers =
-            this.shuffle([
-                1, 2, 3,
-                4, 5, 6,
-                7, 8, 9
-            ]);
-
+        const numbers = this.shuffle(
+            [1, 2, 3, 4, 5, 6, 7, 8, 9]
+        );
 
         for (const number of numbers) {
 
@@ -92,185 +54,129 @@ class Sudoku {
 
                 board[row][col] = number;
 
-
-                if (
-                    this.solve(board)
-                ) {
-
+                if (this.fillBoard(board)) {
                     return true;
                 }
 
-
-                board[row][col] = null;
+                board[row][col] = 0;
             }
         }
-
 
         return false;
     }
 
+    findEmptyCell(board) {
 
-    static findEmptyCell(board) {
+        for (let row = 0; row < 9; row++) {
 
-        for (
-            let row = 0;
-            row < this.SIZE;
-            row++
-        ) {
+            for (let col = 0; col < 9; col++) {
 
-            for (
-                let col = 0;
-                col < this.SIZE;
-                col++
-            ) {
-
-                if (
-                    board[row][col] === null
-                ) {
-
-                    return [
-                        row,
-                        col
-                    ];
+                if (board[row][col] === 0) {
+                    return [row, col];
                 }
-            }
-        }
 
+            }
+
+        }
 
         return null;
     }
 
-
-    static isValid(
-        board,
-        row,
-        col,
-        number
-    ) {
+    isValid(board, row, col, number) {
 
         // Row
-
-        for (
-            let c = 0;
-            c < this.SIZE;
-            c++
-        ) {
+        for (let c = 0; c < 9; c++) {
 
             if (
-                c !== col &&
                 board[row][c] === number
             ) {
-
                 return false;
             }
-        }
 
+        }
 
         // Column
-
-        for (
-            let r = 0;
-            r < this.SIZE;
-            r++
-        ) {
+        for (let r = 0; r < 9; r++) {
 
             if (
-                r !== row &&
                 board[r][col] === number
             ) {
-
                 return false;
             }
+
         }
 
-
-        // 3 × 3 box
-
-        const startRow =
+        // 3x3 box
+        const boxRow =
             Math.floor(row / 3) * 3;
 
-        const startCol =
+        const boxCol =
             Math.floor(col / 3) * 3;
 
-
         for (
-            let r = startRow;
-            r < startRow + 3;
+            let r = boxRow;
+            r < boxRow + 3;
             r++
         ) {
 
             for (
-                let c = startCol;
-                c < startCol + 3;
+                let c = boxCol;
+                c < boxCol + 3;
                 c++
             ) {
 
                 if (
-                    (r !== row || c !== col) &&
                     board[r][c] === number
                 ) {
-
                     return false;
                 }
-            }
-        }
 
+            }
+
+        }
 
         return true;
     }
 
-
-    static generatePuzzle(
-        difficulty = "medium"
-    ) {
-
-        const solution =
-            this.generateSolvedBoard();
-
+    createPuzzle(solution) {
 
         const puzzle =
             solution.map(
                 row => [...row]
             );
 
+        let cellsToRemove;
 
-        const cellsToRemove = {
+        switch (window.currentDifficulty || "medium") {
 
-            easy: 38,
+            case "easy":
+                cellsToRemove = 38;
+                break;
 
-            medium: 48,
+            case "hard":
+                cellsToRemove = 58;
+                break;
 
-            hard: 55
-
-        }[difficulty];
-
+            default:
+                cellsToRemove = 48;
+        }
 
         const positions = [];
 
+        for (let row = 0; row < 9; row++) {
 
-        for (
-            let row = 0;
-            row < 9;
-            row++
-        ) {
+            for (let col = 0; col < 9; col++) {
 
-            for (
-                let col = 0;
-                col < 9;
-                col++
-            ) {
+                positions.push({
+                    row: row,
+                    col: col
+                });
 
-                positions.push([
-                    row,
-                    col
-                ]);
             }
+
         }
 
-
-        const shuffledPositions =
-            this.shuffle(positions);
-
+        this.shuffle(positions);
 
         for (
             let i = 0;
@@ -278,52 +184,38 @@ class Sudoku {
             i++
         ) {
 
-            const [
-                row,
-                col
-            ] = shuffledPositions[i];
+            const position = positions[i];
 
-
-            puzzle[row][col] = null;
+            puzzle[position.row][position.col] = 0;
         }
 
-
-        return {
-            puzzle,
-            solution
-        };
+        return puzzle;
     }
 
+    shuffle(array) {
 
-    static isCorrect(
-        board,
-        solution
-    ) {
+        const result = [...array];
 
         for (
-            let row = 0;
-            row < 9;
-            row++
+            let i = result.length - 1;
+            i > 0;
+            i--
         ) {
 
-            for (
-                let col = 0;
-                col < 9;
-                col++
-            ) {
+            const j =
+                Math.floor(
+                    Math.random() * (i + 1)
+                );
 
-                if (
-                    board[row][col] !==
-                    solution[row][col]
-                ) {
-
-                    return false;
-                }
-            }
+            [
+                result[i],
+                result[j]
+            ] = [
+                result[j],
+                result[i]
+            ];
         }
 
-
-        return true;
+        return result;
     }
-
 }
