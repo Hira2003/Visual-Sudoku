@@ -1237,3 +1237,159 @@ select:focus {
             0.01ms !important;
     }
 }
+/* =========================================
+   GAME HEADER EXIT BUTTON
+========================================= */
+
+.exit-button {
+
+    min-height: 44px;
+
+    padding: 10px 15px;
+
+    border-radius: 12px;
+
+    border: 1px solid var(--border);
+
+    background: var(--surface);
+
+    color: var(--text);
+
+    font-weight: 650;
+
+    cursor: pointer;
+
+    transition:
+        0.15s ease;
+}
+
+
+.exit-button:hover {
+
+    transform: translateY(-2px);
+
+    border-color: var(--accent);
+
+}
+
+
+/* =========================================
+   GAME INFORMATION
+========================================= */
+
+.game-info {
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: flex-end;
+
+    gap: 9px;
+
+    margin-bottom: 18px;
+
+}
+
+
+.game-status {
+
+    min-height: 44px;
+
+    padding:
+        8px
+        14px;
+
+    border-radius: 12px;
+
+    border: 1px solid var(--border);
+
+    background: var(--surface);
+
+    color: var(--text-soft);
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 5px;
+
+    font-size: 12px;
+
+}
+
+
+.game-status strong {
+
+    color: var(--text);
+
+}
+
+
+.game-info .timer-box {
+
+    min-height: 44px;
+
+}
+
+
+/* =========================================
+   MOBILE
+========================================= */
+
+@media (max-width: 520px) {
+
+    .game-info {
+
+        display: grid;
+
+        grid-template-columns:
+            1fr 1fr;
+
+        gap: 7px;
+
+        margin-bottom: 13px;
+
+    }
+
+
+    .game-status {
+
+        justify-content: center;
+
+        padding:
+            8px
+            7px;
+
+        font-size: 11px;
+
+    }
+
+
+    .game-info .timer-box {
+
+        width: 100%;
+
+    }
+
+
+    .game-info .mode-button {
+
+        grid-column: 1 / 3;
+
+        width: 100%;
+
+    }
+
+
+    .exit-button {
+
+        font-size: 12px;
+
+        padding:
+            9px
+            11px;
+
+    }
+
+}
