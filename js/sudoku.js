@@ -5,15 +5,27 @@ class SudokuGenerator {
         this.puzzle = [];
     }
 
-    generate() {
+    generate(difficulty = "medium") {
+
+        // Generate a completely random solved Sudoku.
         this.solution = this.createSolvedBoard();
-        this.puzzle = this.createPuzzle(this.solution);
+
+        // Create the puzzle from the solution.
+        this.puzzle = this.createPuzzle(
+            this.solution,
+            difficulty
+        );
 
         return {
             solution: this.solution,
             puzzle: this.puzzle
         };
     }
+
+
+    // =====================================================
+    // CREATE SOLVED BOARD
+    // =====================================================
 
     createSolvedBoard() {
 
@@ -27,19 +39,28 @@ class SudokuGenerator {
         return board;
     }
 
+
     fillBoard(board) {
 
-        const empty = this.findEmptyCell(board);
+        const emptyCell =
+            this.findEmptyCell(board);
 
-        if (!empty) {
+        if (!emptyCell) {
             return true;
         }
 
-        const [row, col] = empty;
+        const [row, col] =
+            emptyCell;
 
-        const numbers = this.shuffle(
-            [1, 2, 3, 4, 5, 6, 7, 8, 9]
-        );
+
+        // Randomize the numbers before
+        // trying them.
+        const numbers = this.shuffle([
+            1, 2, 3,
+            4, 5, 6,
+            7, 8, 9
+        ]);
+
 
         for (const number of numbers) {
 
@@ -52,12 +73,18 @@ class SudokuGenerator {
                 )
             ) {
 
-                board[row][col] = number;
+                board[row][col] =
+                    number;
 
-                if (this.fillBoard(board)) {
+
+                if (
+                    this.fillBoard(board)
+                ) {
                     return true;
                 }
 
+
+                // Backtracking
                 board[row][col] = 0;
             }
         }
@@ -65,53 +92,108 @@ class SudokuGenerator {
         return false;
     }
 
+
+    // =====================================================
+    // FIND EMPTY CELL
+    // =====================================================
+
     findEmptyCell(board) {
+
+        /*
+         * Instead of always filling the board
+         * from top-left to bottom-right,
+         * choose a random empty cell.
+         *
+         * This increases variation between
+         * generated solutions.
+         */
+
+        const emptyCells = [];
+
 
         for (let row = 0; row < 9; row++) {
 
             for (let col = 0; col < 9; col++) {
 
-                if (board[row][col] === 0) {
-                    return [row, col];
+                if (
+                    board[row][col] === 0
+                ) {
+
+                    emptyCells.push([
+                        row,
+                        col
+                    ]);
+
                 }
-
             }
-
         }
 
-        return null;
+
+        if (emptyCells.length === 0) {
+            return null;
+        }
+
+
+        return emptyCells[
+            Math.floor(
+                Math.random() *
+                emptyCells.length
+            )
+        ];
     }
 
-    isValid(board, row, col, number) {
 
-        // Row
-        for (let c = 0; c < 9; c++) {
+    // =====================================================
+    // CHECK VALIDITY
+    // =====================================================
+
+    isValid(
+        board,
+        row,
+        col,
+        number
+    ) {
+
+        // Check row
+
+        for (
+            let c = 0;
+            c < 9;
+            c++
+        ) {
 
             if (
                 board[row][c] === number
             ) {
                 return false;
             }
-
         }
 
-        // Column
-        for (let r = 0; r < 9; r++) {
+
+        // Check column
+
+        for (
+            let r = 0;
+            r < 9;
+            r++
+        ) {
 
             if (
                 board[r][col] === number
             ) {
                 return false;
             }
-
         }
 
-        // 3x3 box
+
+        // Check 3x3 box
+
         const boxRow =
             Math.floor(row / 3) * 3;
 
         const boxCol =
             Math.floor(col / 3) * 3;
+
 
         for (
             let r = boxRow;
@@ -130,24 +212,37 @@ class SudokuGenerator {
                 ) {
                     return false;
                 }
-
             }
-
         }
+
 
         return true;
     }
 
-    createPuzzle(solution) {
+
+    // =====================================================
+    // CREATE PUZZLE
+    // =====================================================
+
+    createPuzzle(
+        solution,
+        difficulty
+    ) {
 
         const puzzle =
             solution.map(
                 row => [...row]
             );
 
+
+        /*
+         * Number of cells removed.
+         */
+
         let cellsToRemove;
 
-        switch (window.currentDifficulty || "medium") {
+
+        switch (difficulty) {
 
             case "easy":
                 cellsToRemove = 38;
@@ -157,11 +252,19 @@ class SudokuGenerator {
                 cellsToRemove = 58;
                 break;
 
+            case "medium":
             default:
                 cellsToRemove = 48;
+                break;
         }
 
+
+        /*
+         * Create all 81 positions.
+         */
+
         const positions = [];
+
 
         for (let row = 0; row < 9; row++) {
 
@@ -173,10 +276,23 @@ class SudokuGenerator {
                 });
 
             }
-
         }
 
-        this.shuffle(positions);
+
+        /*
+         * IMPORTANT:
+         *
+         * shuffle() returns a NEW array.
+         * We must store it.
+         */
+
+        const shuffledPositions =
+            this.shuffle(positions);
+
+
+        /*
+         * Remove random cells.
+         */
 
         for (
             let i = 0;
@@ -184,17 +300,31 @@ class SudokuGenerator {
             i++
         ) {
 
-            const position = positions[i];
+            const position =
+                shuffledPositions[i];
 
-            puzzle[position.row][position.col] = 0;
+
+            puzzle[
+                position.row
+            ][
+                position.col
+            ] = 0;
         }
+
 
         return puzzle;
     }
 
+
+    // =====================================================
+    // SHUFFLE
+    // =====================================================
+
     shuffle(array) {
 
-        const result = [...array];
+        const result =
+            [...array];
+
 
         for (
             let i = result.length - 1;
@@ -204,8 +334,10 @@ class SudokuGenerator {
 
             const j =
                 Math.floor(
-                    Math.random() * (i + 1)
+                    Math.random() *
+                    (i + 1)
                 );
+
 
             [
                 result[i],
@@ -216,6 +348,8 @@ class SudokuGenerator {
             ];
         }
 
+
         return result;
     }
+
 }
