@@ -7,66 +7,55 @@ class App {
                 "sudokuBoard"
             );
 
-
         this.paletteElement =
             document.getElementById(
                 "symbolPalette"
             );
-
 
         this.timerElement =
             document.getElementById(
                 "timer"
             );
 
-
         this.messageElement =
             document.getElementById(
                 "message"
             );
-
 
         this.winModal =
             document.getElementById(
                 "winModal"
             );
 
-
         this.finalTime =
             document.getElementById(
                 "finalTime"
             );
-
 
         this.gameThemeName =
             document.getElementById(
                 "gameThemeName"
             );
 
-
         this.gameDifficulty =
             document.getElementById(
                 "gameDifficulty"
             );
-
 
         this.difficultyDisplay =
             document.getElementById(
                 "difficultyDisplay"
             );
 
-
         this.darkModeButton =
             document.getElementById(
                 "darkMode"
             );
 
-
         this.modeIcon =
             document.getElementById(
                 "modeIcon"
             );
-
 
         this.modeText =
             document.getElementById(
@@ -75,96 +64,102 @@ class App {
 
 
         /*
-            Get the settings chosen
-            from the main menu.
-        */
+         * Get settings selected
+         * from the main menu.
+         */
 
-        this.loadGameSettings();
+        this.selectedDifficulty =
+            sessionStorage.getItem(
+                "visualSudokuDifficulty"
+            ) || "medium";
 
+
+        this.selectedTheme =
+            sessionStorage.getItem(
+                "visualSudokuTheme"
+            ) || "numbers";
+
+
+        /*
+         * Create the game.
+         */
 
         this.game =
             new Game();
 
 
+        this.game.difficulty =
+            this.selectedDifficulty;
+
+
+        this.game.theme =
+            this.selectedTheme;
+
+
         this.bindEvents();
 
-
         this.loadAppearance();
-
 
         this.newGame();
 
     }
 
 
-    /* =====================================
-       LOAD SETTINGS
-    ===================================== */
+    newGame() {
 
-    loadGameSettings() {
+        this.game.difficulty =
+            this.selectedDifficulty;
 
-        this.selectedDifficulty =
-            sessionStorage.getItem(
-                "visualSudokuDifficulty"
-            );
+        this.game.theme =
+            this.selectedTheme;
 
 
-        this.selectedTheme =
-            sessionStorage.getItem(
-                "visualSudokuTheme"
-            );
+        this.game.start();
 
 
-        /*
-            If somebody opens game.html
-            directly without using the
-            menu, give them safe defaults.
-        */
+        this.updateGameInformation();
 
-        if (
-            ![
-                "easy",
-                "medium",
-                "hard"
-            ].includes(
-                this.selectedDifficulty
-            )
-        ) {
+        this.render();
 
-            this.selectedDifficulty =
-                "medium";
-
-        }
-
-
-        if (
-            ![
-                "numbers",
-                "fruits",
-                "flowers"
-            ].includes(
-                this.selectedTheme
-            )
-        ) {
-
-            this.selectedTheme =
-                "numbers";
-
-        }
+        this.message("");
 
     }
 
 
-    /* =====================================
-       EVENTS
-    ===================================== */
+    updateGameInformation() {
+
+        const theme =
+            getTheme(
+                this.selectedTheme
+            );
+
+
+        const difficulty =
+            this.selectedDifficulty
+                .charAt(0)
+                .toUpperCase() +
+            this.selectedDifficulty
+                .slice(1);
+
+
+        this.gameThemeName.textContent =
+            theme.name;
+
+
+        this.gameDifficulty.textContent =
+            difficulty;
+
+
+        this.difficultyDisplay.textContent =
+            difficulty;
+
+    }
+
 
     bindEvents() {
 
         document
-            .getElementById(
-                "exitButton"
-            )
+            .getElementById("exitButton")
             .addEventListener(
                 "click",
                 () => this.exitGame()
@@ -172,9 +167,7 @@ class App {
 
 
         document
-            .getElementById(
-                "restartBtn"
-            )
+            .getElementById("restartBtn")
             .addEventListener(
                 "click",
                 () => this.restart()
@@ -182,9 +175,7 @@ class App {
 
 
         document
-            .getElementById(
-                "hintBtn"
-            )
+            .getElementById("hintBtn")
             .addEventListener(
                 "click",
                 () => this.hint()
@@ -192,9 +183,7 @@ class App {
 
 
         document
-            .getElementById(
-                "nextGameBtn"
-            )
+            .getElementById("nextGameBtn")
             .addEventListener(
                 "click",
                 () => {
@@ -208,9 +197,7 @@ class App {
 
 
         document
-            .getElementById(
-                "winExitButton"
-            )
+            .getElementById("winExitButton")
             .addEventListener(
                 "click",
                 () => this.exitGame()
@@ -224,34 +211,22 @@ class App {
             );
 
 
+        /*
+         * Keyboard input.
+         */
+
         document.addEventListener(
             "keydown",
             event => {
 
-                const key =
-                    event.key;
-
-
                 if (
-                    key >= "1" &&
-                    key <= "9"
+                    event.key >= "1" &&
+                    event.key <= "9"
                 ) {
 
                     this.enterValue(
-                        Number(key)
+                        Number(event.key)
                     );
-
-                }
-
-
-                if (
-                    key === "Escape"
-                ) {
-
-                    this.game.selectedCell =
-                        null;
-
-                    this.render();
 
                 }
 
@@ -260,87 +235,6 @@ class App {
 
     }
 
-
-    /* =====================================
-       NEW GAME
-    ===================================== */
-
-    newGame() {
-
-        this.game.difficulty =
-            this.selectedDifficulty;
-
-
-        this.game.theme =
-            this.selectedTheme;
-
-
-        this.game.start();
-
-
-        this.updateGameInformation();
-
-
-        this.render();
-
-
-        this.message("");
-
-    }
-
-
-    /* =====================================
-       GAME INFORMATION
-    ===================================== */
-
-    updateGameInformation() {
-
-        const difficultyName =
-            this.selectedDifficulty
-                .charAt(0)
-                .toUpperCase() +
-            this.selectedDifficulty
-                .slice(1);
-
-
-        const theme =
-            getTheme(
-                this.selectedTheme
-            );
-
-
-        this.gameThemeName.textContent =
-            theme.name;
-
-
-        this.gameDifficulty.textContent =
-            difficultyName;
-
-
-        this.difficultyDisplay.textContent =
-            difficultyName;
-
-    }
-
-
-    /* =====================================
-       EXIT
-    ===================================== */
-
-    exitGame() {
-
-        this.game.stopTimer();
-
-
-        window.location.href =
-            "index.html";
-
-    }
-
-
-    /* =====================================
-       RENDER
-    ===================================== */
 
     render() {
 
@@ -353,14 +247,9 @@ class App {
     }
 
 
-    /* =====================================
-       BOARD
-    ===================================== */
-
     renderBoard() {
 
-        this.boardElement.innerHTML =
-            "";
+        this.boardElement.innerHTML = "";
 
 
         const theme =
@@ -383,24 +272,25 @@ class App {
 
                 const cell =
                     document.createElement(
-                        "div"
+                        "button"
                     );
 
 
-                cell.classList.add(
-                    "cell"
-                );
+                cell.type = "button";
+
+                cell.className =
+                    "cell";
 
 
                 const value =
                     this.game.board[row][col];
 
 
-                const isGiven =
-                    this.game.puzzle[row][col] !== null;
+                const given =
+                    this.game.puzzle[row][col] !== 0;
 
 
-                if (isGiven) {
+                if (given) {
 
                     cell.classList.add(
                         "given"
@@ -436,9 +326,7 @@ class App {
                 }
 
 
-                if (
-                    value !== null
-                ) {
+                if (value !== 0) {
 
                     cell.textContent =
                         theme.symbols[
@@ -446,18 +334,6 @@ class App {
                         ];
 
                 }
-
-
-                cell.setAttribute(
-                    "role",
-                    "button"
-                );
-
-
-                cell.setAttribute(
-                    "aria-label",
-                    `Row ${row + 1}, Column ${col + 1}`
-                );
 
 
                 cell.addEventListener(
@@ -473,10 +349,9 @@ class App {
                 );
 
 
-                this.boardElement
-                    .appendChild(
-                        cell
-                    );
+                this.boardElement.appendChild(
+                    cell
+                );
 
             }
 
@@ -485,14 +360,9 @@ class App {
     }
 
 
-    /* =====================================
-       PALETTE
-    ===================================== */
-
     renderPalette() {
 
-        this.paletteElement.innerHTML =
-            "";
+        this.paletteElement.innerHTML = "";
 
 
         const theme =
@@ -513,22 +383,14 @@ class App {
                     );
 
 
+                button.type = "button";
+
                 button.className =
                     "symbol-button";
 
 
-                button.type =
-                    "button";
-
-
                 button.textContent =
                     symbol;
-
-
-                button.setAttribute(
-                    "aria-label",
-                    `Symbol ${index + 1}`
-                );
 
 
                 button.addEventListener(
@@ -543,10 +405,9 @@ class App {
                 );
 
 
-                this.paletteElement
-                    .appendChild(
-                        button
-                    );
+                this.paletteElement.appendChild(
+                    button
+                );
 
             }
         );
@@ -554,14 +415,7 @@ class App {
     }
 
 
-    /* =====================================
-       CELL SELECTION
-    ===================================== */
-
-    selectCell(
-        row,
-        col
-    ) {
+    selectCell(row, col) {
 
         this.game.selectCell(
             row,
@@ -574,17 +428,11 @@ class App {
     }
 
 
-    /* =====================================
-       VALUE
-    ===================================== */
-
     enterValue(value) {
 
-        const selected =
-            this.game.selectedCell;
-
-
-        if (!selected) {
+        if (
+            !this.game.selectedCell
+        ) {
 
             this.message(
                 "Select an empty cell first."
@@ -601,32 +449,25 @@ class App {
             );
 
 
+        this.render();
+
+
         if (
-            result.reason ===
-            "mistake"
+            result.reason === "mistake"
         ) {
-
-            this.render();
-
 
             this.message(
                 "Oops! That's not correct. ❌"
             );
-
 
             return;
 
         }
 
 
-        if (
-            result.success
-        ) {
+        if (result.success) {
 
             this.message("");
-
-
-            this.render();
 
 
             if (
@@ -643,10 +484,6 @@ class App {
 
     }
 
-
-    /* =====================================
-       HINT
-    ===================================== */
 
     hint() {
 
@@ -668,37 +505,6 @@ class App {
         this.render();
 
 
-        const index =
-            result.row * 9 +
-            result.col;
-
-
-        const cell =
-            this.boardElement
-                .children[index];
-
-
-        if (cell) {
-
-            cell.classList.add(
-                "hint"
-            );
-
-
-            setTimeout(
-                () => {
-
-                    cell.classList.remove(
-                        "hint"
-                    );
-
-                },
-                800
-            );
-
-        }
-
-
         this.message(
             "A little help from the garden 🌱"
         );
@@ -717,17 +523,11 @@ class App {
     }
 
 
-    /* =====================================
-       RESTART
-    ===================================== */
-
     restart() {
 
         this.game.restart();
 
-
         this.render();
-
 
         this.message(
             "Puzzle restarted."
@@ -736,11 +536,12 @@ class App {
     }
 
 
-    /* =====================================
-       TIMER
-    ===================================== */
-
     updateTimer() {
+
+        if (!this.timerElement) {
+            return;
+        }
+
 
         this.timerElement.textContent =
             this.game.getTimeString();
@@ -748,21 +549,18 @@ class App {
     }
 
 
-    /* =====================================
-       MESSAGE
-    ===================================== */
-
     message(text) {
+
+        if (!this.messageElement) {
+            return;
+        }
+
 
         this.messageElement.textContent =
             text;
 
     }
 
-
-    /* =====================================
-       WIN
-    ===================================== */
 
     showWin() {
 
@@ -786,30 +584,36 @@ class App {
     }
 
 
-    /* =====================================
-       DARK MODE
-    ===================================== */
+    exitGame() {
+
+        this.game.stopTimer();
+
+        window.location.href =
+            "index.html";
+
+    }
+
 
     loadAppearance() {
 
-        const savedMode =
+        const mode =
             localStorage.getItem(
                 "visualSudokuMode"
             );
 
 
-        const isDark =
-            savedMode === "dark";
+        const dark =
+            mode === "dark";
 
 
         document.body.classList.toggle(
             "dark-mode",
-            isDark
+            dark
         );
 
 
         this.updateModeButton(
-            isDark
+            dark
         );
 
     }
@@ -817,7 +621,7 @@ class App {
 
     toggleDarkMode() {
 
-        const isDark =
+        const dark =
             document.body.classList.toggle(
                 "dark-mode"
             );
@@ -825,43 +629,43 @@ class App {
 
         localStorage.setItem(
             "visualSudokuMode",
-            isDark
+            dark
                 ? "dark"
                 : "light"
         );
 
 
         this.updateModeButton(
-            isDark
+            dark
         );
 
     }
 
 
-    updateModeButton(isDark) {
-
-        this.darkModeButton
-            .setAttribute(
-                "aria-pressed",
-                String(isDark)
-            );
-
+    updateModeButton(dark) {
 
         this.modeIcon.textContent =
-            isDark
-                ? "☀️"
-                : "🌙";
+            dark ? "☀️" : "🌙";
 
 
         this.modeText.textContent =
-            isDark
-                ? "Light"
-                : "Dark";
+            dark ? "Light" : "Dark";
+
+
+        this.darkModeButton.setAttribute(
+            "aria-pressed",
+            String(dark)
+        );
 
     }
 
 }
 
+
+/*
+ * Start application after
+ * the page has loaded.
+ */
 
 window.addEventListener(
     "DOMContentLoaded",
